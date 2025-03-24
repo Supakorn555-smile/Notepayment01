@@ -162,13 +162,18 @@
             if (chart) {
                 chart.destroy();
             }
+            let balance = income - expense; // คำนวณยอดคงเหลือ
+            let total = balance + expense;
+            let balancePercentage = total ? ((balance / total) * 100).toFixed(1) : 0;
+            let expensePercentage = total ? ((expense / total) * 100).toFixed(1) : 0;
+
             chart = new Chart(ctx, {
                 type: "doughnut",
                 data: {
-                    labels: ["รายรับ", "รายจ่าย"],
+                    labels: [`ยอดคงเหลือ ${balancePercentage}%`, `รายจ่าย ${expensePercentage}%`],
                     datasets: [{
-                        data: [income, expense],
-                        backgroundColor: ["#28a745", "#dc3545"],
+                        data: [balance, expense],
+                        backgroundColor: ["#007bff", "#dc3545"],
                     }]
                 },
                 options: {
@@ -179,8 +184,7 @@
                             color: '#fff',
                             formatter: (value, ctx) => {
                                 let total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                let percentage = total ? ((value / total) * 100).toFixed(1) + '%' : '0%';
-                                return percentage;
+                                return total ? ((value / total) * 100).toFixed(1) + '%' : '0%';
                             },
                             font: {
                                 weight: 'bold',
@@ -192,9 +196,6 @@
                 plugins: [ChartDataLabels]
             });
         }
-
-        // Initial UI Update
-        อัพเดตUI();
     </script>
 </body>
 
